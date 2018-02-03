@@ -52,3 +52,9 @@ Mkfile.old
 dkms.conf
 
 .DS_Store
+
+bin/
+build/
+
+*.obj
+*.mtl
