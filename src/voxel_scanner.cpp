@@ -255,7 +255,7 @@ VoxelScanner::VoxelScanner(string image_path)
 	}
 
 	// clean up inner cubes
-	unsigned char temp[dim][dim][dim][4];
+	unsigned char temp[dim][dim][dim];
 	memset(temp, 0, size);
 	for (int y = 1; y < dim - 1; y++)
 	{
@@ -270,7 +270,7 @@ VoxelScanner::VoxelScanner(string image_path)
 					voxels[z + 1][y][x][3] > 0 &&
 					voxels[z - 1][y][x][3] > 0)
 				{
-					temp[z][y][x][3] = 0;
+					temp[z][y][x] = 1;
 				}
 			}
 		}
@@ -282,12 +282,7 @@ VoxelScanner::VoxelScanner(string image_path)
 		{
 			for (int z = 1; z < dim - 1; z++)
 			{
-				if (voxels[z][y][x + 1][3] > 0 &&
-					voxels[z][y][x - 1][3] > 0 &&
-					voxels[z][y + 1][x][3] > 0 &&
-					voxels[z][y - 1][x][3] > 0 &&
-					voxels[z + 1][y][x][3] > 0 &&
-					voxels[z - 1][y][x][3] > 0)
+				if (temp[z][y][x] == 1)
 				{
 					voxels[z][y][x][3] = 0;
 				}
