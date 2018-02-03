@@ -48,9 +48,9 @@ cd bin/release/
 
 ### Apple example
 
-[![IMAGE ALT TEXT HERE](http://img.youtube.com/vi/5X2W6qlcgCo/0.jpg)](http://www.youtube.com/watch?v= 5X2W6qlcgCo)
+[![apple example video](http://img.youtube.com/vi/5X2W6qlcgCo/0.jpg)](http://www.youtube.com/watch?v=5X2W6qlcgCo)
 
 ### Seashell example
 
-[![IMAGE ALT TEXT HERE](http://img.youtube.com/vi/YhFYsSFmrJQ/0.jpg)](http://www.youtube.com/watch?v= YhFYsSFmrJQ)
+[![seashell example video](http://img.youtube.com/vi/YhFYsSFmrJQ/0.jpg)](http://www.youtube.com/watch?v=YhFYsSFmrJQ)
 
