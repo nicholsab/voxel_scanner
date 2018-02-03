@@ -25,238 +25,200 @@ VoxelScanner::VoxelScanner(string image_path)
 	images[BACK] = ResizeImage(DecodePng(image_path + "/" + "back.png"));
 	images[BOTTOM] = ResizeImage(DecodePng(image_path + "/" + "bottom.png"));
 
-	for (int pass = 0; pass < 2; pass++)
-	{
-		Image *i2 = images[FRONT];
-		for (int y = 0; y < dim; y++)
-		{
-			for (int x = 0; x < dim; x++)
-			{
-				int off = (y * dim + x) * 4;
-				int r = i2->data.at(off);
-				int g = i2->data.at(off + 1);
-				int b = i2->data.at(off + 2);
-				int a = i2->data.at(off + 3);
-				int first = 1;
-				for (int z = 0; z < dim; z++)
-				{
-					int xt = z;
-					int yt = dim - 1 - y;
-					int zt = x;
+	for (int pass = 0; pass < 2; pass++) {
+        Image *i2 = images[FRONT];
+        for (int y = 0; y < dim; y++) {
+            for (int x = 0; x < dim; x++) {
+                int off = (y * dim + x) * 4;
+                int r = i2->data.at(off);
+                int g = i2->data.at(off+1);
+                int b = i2->data.at(off+2);
+                int a = i2->data.at(off+3);
+                int first = 1;
+                for (int z = 0; z < dim; z++) {
+                    int xt = z;
+                    int yt = dim-1-y;
+                    int zt = x;
+                    
+                    if (pass == 0) {
+                        if (a < 255)
+                            a=0;
+                        else
+                            a=255;
+                        voxels[zt][yt][xt][0] = r;
+                        voxels[zt][yt][xt][1] = g;
+                        voxels[zt][yt][xt][2] = b;
+                        voxels[zt][yt][xt][3] = a;
+                    }
+                    else {
+                        if (a > 0) {
+                            if (voxels[zt][yt][xt][3] == 255 && first == 1) {
+                                first = 0;
+                                voxels[zt][yt][xt][0] = r;
+                                voxels[zt][yt][xt][1] = g;
+                                voxels[zt][yt][xt][2] = b;
+                                voxels[zt][yt][xt][3] = 255;
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
-					if (pass == 0)
-					{
-						if (a < 255)
-							a = 0;
-						else
-							a = 255;
-						voxels[zt][yt][xt][0] = r;
-						voxels[zt][yt][xt][1] = g;
-						voxels[zt][yt][xt][2] = b;
-						voxels[zt][yt][xt][3] = a;
-					}
-					else
-					{
-						if (a > 0)
-						{
-							if (voxels[zt][yt][xt][3] == 255 && first == 1)
-							{
-								first = 0;
-								voxels[zt][yt][xt][0] = r;
-								voxels[zt][yt][xt][1] = g;
-								voxels[zt][yt][xt][2] = b;
-								voxels[zt][yt][xt][3] = 255;
-							}
-						}
-					}
-				}
-			}
-		}
-
-		i2 = images[RIGHT];
-		for (int y = 0; y < dim; y++)
-		{
-			for (int x = 0; x < dim; x++)
-			{
-				int off = (y * dim + x) * 4;
-				int r = i2->data.at(off);
-				int g = i2->data.at(off + 1);
-				int b = i2->data.at(off + 2);
-				int a = i2->data.at(off + 3);
-				int first = 1;
-				for (int z = 0; z < dim; z++)
-				{
-					int xt = x;
-					int yt = dim - 1 - y;
-					int zt = dim - 1 - z;
-					if (a < 255)
-					{
-						if (pass == 0)
-							voxels[zt][yt][xt][3] = 0;
-					}
-					else
-					{
-						if (voxels[zt][yt][xt][3] == 255 && first == 1)
-						{
-							first = 0;
-							voxels[zt][yt][xt][0] = r;
-							voxels[zt][yt][xt][1] = g;
-							voxels[zt][yt][xt][2] = b;
-							voxels[zt][yt][xt][3] = 255;
-						}
-					}
-				}
-			}
-		}
-
-		i2 = images[LEFT];
-		for (int y = 0; y < dim; y++)
-		{
-			for (int x = 0; x < dim; x++)
-			{
-				int off = (y * dim + x) * 4;
-				int r = i2->data.at(off);
-				int g = i2->data.at(off + 1);
-				int b = i2->data.at(off + 2);
-				int a = i2->data.at(off + 3);
-				int first = 1;
-				for (int z = 0; z < dim; z++)
-				{
-					int xt = dim - 1 - x;
-					int yt = dim - 1 - y;
-					int zt = z;
-					if (a < 255)
-					{
-						if (pass == 0)
-							voxels[zt][yt][xt][3] = 0;
-					}
-					else
-					{
-						if (voxels[zt][yt][xt][3] == 255 && first == 1)
-						{
-							first = 0;
-							voxels[zt][yt][xt][0] = r;
-							voxels[zt][yt][xt][1] = g;
-							voxels[zt][yt][xt][2] = b;
-							voxels[zt][yt][xt][3] = 255;
-						}
-					}
-				}
-			}
-		}
-
-		i2 = images[BACK];
-		for (int y = 0; y < dim; y++)
-		{
-			for (int x = 0; x < dim; x++)
-			{
-				int off = (y * dim + x) * 4;
-				int r = i2->data.at(off);
-				int g = i2->data.at(off + 1);
-				int b = i2->data.at(off + 2);
-				int a = i2->data.at(off + 3);
-				int first = 1;
-				for (int z = 0; z < dim; z++)
-				{
-					int xt = dim - 1 - z;
-					int yt = dim - 1 - y;
-					int zt = dim - 1 - x;
-					if (a < 255)
-					{
-						if (pass == 0)
-							voxels[zt][yt][xt][3] = 0;
-					}
-					else
-					{
-						if (voxels[zt][yt][xt][3] == 255 && first == 1)
-						{
-							first = 0;
-							voxels[zt][yt][xt][0] = r;
-							voxels[zt][yt][xt][1] = g;
-							voxels[zt][yt][xt][2] = b;
-							voxels[zt][yt][xt][3] = 255;
-						}
-					}
-				}
-			}
-		}
-
-		i2 = images[BOTTOM];
-		for (int y = 0; y < dim; y++)
-		{
-			for (int x = 0; x < dim; x++)
-			{
-				int off = (y * dim + x) * 4;
-				int r = i2->data.at(off);
-				int g = i2->data.at(off + 1);
-				int b = i2->data.at(off + 2);
-				int a = i2->data.at(off + 3);
-				int first = 1;
-				for (int z = 0; z < dim; z++)
-				{
-					int xt = y;
-					int yt = z;
-					int zt = x;
-					if (a < 255)
-					{
-						if (pass == 0)
-							voxels[zt][yt][xt][3] = 0;
-					}
-					else
-					{
-						if (voxels[zt][yt][xt][3] == 255 && first == 1)
-						{
-							first = 0;
-							voxels[zt][yt][xt][0] = r;
-							voxels[zt][yt][xt][1] = g;
-							voxels[zt][yt][xt][2] = b;
-							voxels[zt][yt][xt][3] = 255;
-						}
-					}
-				}
-			}
-		}
-
-		i2 = images[TOP];
-		for (int y = 0; y < dim; y++)
-		{
-			for (int x = 0; x < dim; x++)
-			{
-				int off = (y * dim + x) * 4;
-				int r = i2->data.at(off);
-				int g = i2->data.at(off + 1);
-				int b = i2->data.at(off + 2);
-				int a = i2->data.at(off + 3);
-				int first = 1;
-				for (int z = 0; z < dim; z++)
-				{
-					int xt = dim - 1 - y;
-					int yt = dim - 1 - z;
-					int zt = x;
-					if (a < 255)
-					{
-						if (pass == 0)
-							voxels[zt][yt][xt][3] = 0;
-					}
-					else
-					{
-						if (voxels[zt][yt][xt][3] == 255 && first == 1)
-						{
-							first = 0;
-							voxels[zt][yt][xt][0] = r;
-							voxels[zt][yt][xt][1] = g;
-							voxels[zt][yt][xt][2] = b;
-							voxels[zt][yt][xt][3] = 255;
-						}
-					}
-				}
-			}
-		}
-	}
+        i2 = images[RIGHT];
+        for (int y = 0; y < dim; y++) {
+            for (int x = 0; x < dim; x++) {
+                int off = (y * dim + x) * 4;
+                int r = i2->data.at(off);
+                int g = i2->data.at(off+1);
+                int b = i2->data.at(off+2);
+                int a = i2->data.at(off+3);
+                int first = 1;
+                for (int z = 0; z < dim; z++) {
+                    int xt = x;
+                    int yt = dim-1-y;
+                    int zt = dim-1-z;
+                    if (a < 255) {
+                        if (pass == 0)
+                            voxels[zt][yt][xt][3] = 0;
+                    }
+                    else {
+                        if (voxels[zt][yt][xt][3] == 255 && first == 1) {
+                            first = 0;
+                            voxels[zt][yt][xt][0] = r;
+                            voxels[zt][yt][xt][1] = g;
+                            voxels[zt][yt][xt][2] = b;
+                            voxels[zt][yt][xt][3] = 255;
+                        }
+                    }
+                }
+            }
+        }
+                
+        i2 = images[LEFT];
+        for (int y = 0; y < dim; y++) {
+            for (int x = 0; x < dim; x++) {
+                int off = (y * dim + x) * 4;
+                int r = i2->data.at(off);
+                int g = i2->data.at(off+1);
+                int b = i2->data.at(off+2);
+                int a = i2->data.at(off+3);
+                int first = 1;
+                for (int z = 0; z < dim; z++) {
+                    int xt = dim-1-x;
+                    int yt = dim-1-y;
+                    int zt = z;
+                    if (a < 255) {
+                        if (pass == 0)
+                            voxels[zt][yt][xt][3] = 0;
+                    }
+                    else {
+                        if (voxels[zt][yt][xt][3] == 255 && first == 1) {
+                            first = 0;
+                            voxels[zt][yt][xt][0] = r;
+                            voxels[zt][yt][xt][1] = g;
+                            voxels[zt][yt][xt][2] = b;
+                            voxels[zt][yt][xt][3] = 255;
+                        }
+                    }
+                }
+            }
+        }
+        
+        i2 = images[BACK];
+        for (int y = 0; y < dim; y++) {
+            for (int x = 0; x < dim; x++) {
+                int off = (y * dim + x) * 4;
+                int r = i2->data.at(off);
+                int g = i2->data.at(off+1);
+                int b = i2->data.at(off+2);
+                int a = i2->data.at(off+3);
+                int first = 1;
+                for (int z = 0; z < dim; z++) {
+                    int xt = dim-1-z;
+                    int yt = dim-1-y;
+                    int zt = dim-1-x;
+                    if (a < 255) {
+                        if (pass == 0)
+                            voxels[zt][yt][xt][3] = 0;
+                    }
+                    else {
+                        if (voxels[zt][yt][xt][3] == 255 && first == 1) {
+                            first = 0;
+                            voxels[zt][yt][xt][0] = r;
+                            voxels[zt][yt][xt][1] = g;
+                            voxels[zt][yt][xt][2] = b;
+                            voxels[zt][yt][xt][3] = 255;
+                        }
+                    }
+                }
+            }
+        }
+        
+        i2 = images[BOTTOM];
+        for (int y = 0; y < dim; y++) {
+            for (int x = 0; x < dim; x++) {
+                int off = (y * dim + x) * 4;
+                int r = i2->data.at(off);
+                int g = i2->data.at(off+1);
+                int b = i2->data.at(off+2);
+                int a = i2->data.at(off+3);
+                int first = 1;
+                for (int z = 0; z < dim; z++) {
+                    int xt = y;
+                    int yt = z;
+                    int zt = x;
+                    if (a < 255) {
+                        if (pass == 0)
+                            voxels[zt][yt][xt][3] = 0;
+                    }
+                    else {
+                        if (voxels[zt][yt][xt][3] == 255 && first == 1) {
+                            first = 0;
+                            voxels[zt][yt][xt][0] = r;
+                            voxels[zt][yt][xt][1] = g;
+                            voxels[zt][yt][xt][2] = b;
+                            voxels[zt][yt][xt][3] = 255;
+                        }
+                    }
+                }
+            }
+        }
+        
+        i2 = images[TOP];
+        for (int y = 0; y < dim; y++) {
+            for (int x = 0; x < dim; x++) {
+                int off = (y * dim + x) * 4;
+                int r = i2->data.at(off);
+                int g = i2->data.at(off+1);
+                int b = i2->data.at(off+2);
+                int a = i2->data.at(off+3);
+                int first = 1;
+                for (int z = 0; z < dim; z++) {
+                    int xt = dim-1-y;
+                    int yt = dim-1-z;
+                    int zt = x;
+                    if (a < 255) {
+                        if (pass == 0)
+                            voxels[zt][yt][xt][3] = 0;
+                    }
+                    else {
+                        if (voxels[zt][yt][xt][3] == 255 && first == 1) {
+                            first = 0;
+                            voxels[zt][yt][xt][0] = r;
+                            voxels[zt][yt][xt][1] = g;
+                            voxels[zt][yt][xt][2] = b;
+                            voxels[zt][yt][xt][3] = 255;
+                        }
+                    }
+                }
+            }
+        }
+    }
 
 	// clean up inner cubes
 	unsigned char temp[dim][dim][dim];
-	memset(temp, 0, size);
+	memset(temp, 0, sizeof(temp));
 	for (int y = 1; y < dim - 1; y++)
 	{
 		for (int x = 1; x < dim - 1; x++)
@@ -354,6 +316,7 @@ void VoxelScanner::VoxeltoPng(string filename)
 	}
 
 	filename = filename + ".png";
+	cout << "Saving image to: " << filename << endl;
 	unsigned error = lodepng::encode(filename, image->data, image->width, image->height);
 	if (error)
 	{
@@ -380,7 +343,7 @@ void VoxelScanner::VoxeltoOBJ(std::string filename)
 		{
 			for (int x = 0; x < dim; x++)
 			{
-				if (voxels[z][y][x][3] == 0 && y == 16)
+				if (voxels[z][y][x][3] > 0)
 				{
 					float r = voxels[z][y][x][0];
 					float g = voxels[z][y][x][1];
