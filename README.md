@@ -3,11 +3,14 @@
 A simple 3D voxel scanner program that reads in 2D images of a model and creates a 3D matrix of colored cubes (voxels) for video games, 3D printers, model simulations, game developers, and more.
 
 ![](doc/apples_all.png "screenshot 1")
+
 *__Input:__ 6 images of an apple from each perspective*
 
 *__Output:__ .obj and .mtl files*
 
-You must take 6 pictures of an object from each angle; top, bottom, left, right, front, back.  The app automatically creates a voxel 3D object in __32x32x32__ colored voxels.  A voxel is a 3D cube and is commonly used in video games and by 3D printers.
+You must take 6 pictures of an object from each angle; top, bottom, left, right, front, back.  Each image needs to have transparency alpha channels enabled, so that the transparent parts are taken out of the model.  The app automatically creates a voxel 3D object in __32x32x32__ colored voxels.  A voxel is a 3D cube and is commonly used in video games and by 3D printers.
+
+There is also an optional mode to generate a flattened 2d (32x1024) png image of the model.
 
 The generated Wavefront OBJ file (\*.obj) and the Material Template Library file (\*.mtl) can be opened with almost any 3D modeling tool.
 
